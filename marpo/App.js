@@ -126,7 +126,7 @@ const AppBar = (props) => (
             justify='center'>
 
             <Image 
-                source={require('./assets/marSeal.png')}
+                source={require('./assets/images/marSeal.png')}
                 style={{ width: 64, height: 64 }}/>
             <Text size='large'>{props.title}</Text>
         </Box>

@@ -98,7 +98,7 @@ const MapViewer = () => (
         imageHeight={1147}
         enableCenterFocus={false}>
         <Image 
-            source={require('./assets/marMap.png')}
+            source={require('./assets/images/marMap.png')}
             style={{ width:1495, height:1147 }}/>
     </ImageZoom>
 );
