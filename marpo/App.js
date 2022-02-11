@@ -1,39 +1,30 @@
 import React, { useState } from 'react';
 
-import {
-    Image,
-    Dimensions,
-    ScrollView,
-} from 'react-native';
-
-import ImageZoom from 'react-native-image-pan-zoom';
-import { WebView } from 'react-native-webview';
+import { Image } from 'react-native';
 
 import { 
     Box,
     Button,
     Collapsible,
-    Menu,
-    Table,
-    TableBody,
-    TableRow,
-    TableCell,
-    Text,
-    Heading,
     Grommet,
     Layer,
-    Meter,
     ResponsiveContext,
-    Stack,
+    Text,
 } from 'grommet';
 
 import { 
-    Close,
-    MapLocation,
-    Search,
-    Login,
     Menu as MenuIcon,
 } from 'grommet-icons';
+
+import { 
+    CloseBar,
+    OptionViewer,
+    FilterViewer,
+    MapViewer,
+    LoginViewer,
+} from './Options.js';
+
+import { LotTable } from './Lot.js';
 
 const ro = Math.round;
 const ra = Math.random;
@@ -143,125 +134,6 @@ const AppBar = (props) => (
     </Box>
 );
 
-
-const MenuButton = (props) => (
-    <Button fill='horizontal' onClick={props.click}>
-        <Box
-            pad={{ horizontal: 'large', vertical: 'small' }}
-            direction='row'
-            align='center'
-            justify='evenly'
-            elevation='small'
-            {...props}
-        />
-    </Button>
-);
-
-const MenuItems = (props) => (
-    <Box 
-        direction='column'
-        gap='none'
-        fill='horizontal'>
-
-        <MenuButton click={props.marMap}>
-            <p><MapLocation size='large'/></p>
-            <p>View Map</p>
-        </MenuButton>
-        <MenuButton click={props.marFilter}>
-            <p><Search size='large'/></p>
-            <p>Filter Lots</p>
-        </MenuButton>
-        <MenuButton click={props.marLogin}>
-            <p><Login size='large'/></p>
-            <p>Log In</p>
-        </MenuButton>
-    </Box>
-);
-
-const CloseBar = (props) => (
-    <Box
-        background='base'
-        tag='header'
-        justify='between'
-        align='center'
-        direction='row'
-        pad='small'
-        elevation='small'>
-        <Text size='large'>{props.header}</Text>
-        <Button icon={<Close/>} onClick={props.marAction}/>
-    </Box>
-);
-
-const LotMeter = (props) => (
-    <Box align='end'>
-        <Stack
-            anchor='center'>
-            <Meter
-                type='pie'
-                values={[
-                    { value: props.spotsOpen, color: 'green' },
-                    { value: 
-                        props.spotsTotal - props.spotsOpen,
-                      color: 'red' },
-                ]}
-                size='xsmall'
-            />
-            <Text size='xlarge' color='white'>{props.spotsOpen}</Text>
-        </Stack>
-    </Box>
-);
-
-const LotTable = () => (
-    <ScrollView>
-    <Table
-        background={{
-            body: [ 'white', 'light-1' ]
-        }}>
-        <TableBody>
-            {SAMPLE_DATA.map(datum => (
-            <TableRow key={datum.id}> 
-            <TableCell
-                key={0}
-                background={datum.id % 2 == 1 ? 'white' : 'light-3'}>
-                <Box direction='row' justify='between'
-                    pad={{ horizontal: 'large', vertical: 'small' }}> 
-                    <Box direction='column' justify='center'> 
-                        <Text size='large'><b>
-                            {datum.id}. {datum.name}
-                        </b></Text>
-                        <Text>
-                            {datum.spotsOpen} of {datum.spotsTotal} Spots Open - {ro(datum.spotsOpen / datum.spotsTotal * 100)}%
-                        </Text>
-                        <Text><i>
-                            Last updated at {datum.updateTime}
-                        </i></Text>
-                    </Box>
-                    <LotMeter
-                        spotsOpen={datum.spotsOpen}
-                        spotsTotal={datum.spotsTotal}
-                    />
-                </Box>
-            </TableCell>
-            </TableRow>
-            ))}
-        </TableBody>
-    </Table>
-    </ScrollView>
-);
-
-const FilterMenu = (props) => (
-    <Menu label={props.label}
-        items={
-            props.array.map(datum => (
-                { 
-                    label: datum.name,
-                    onClick: () => {},
-                }
-            ))
-        }
-    />
-);
-
 const AppBody = (props) => (
     <Grommet theme={marTheme} full>
         <ResponsiveContext.Consumer
@@ -293,7 +165,8 @@ const marApp = () => {
                     flex overflow={{ horizontal: 'hidden' }}>
 
                     <Box fill>
-                        <LotTable/>
+                        <LotTable
+                            data={SAMPLE_DATA}/>
                     </Box>
 
                     {(!showMenu || size !== 'small') ? (
@@ -305,7 +178,7 @@ const marApp = () => {
                             width='medium'
                             style={{ zIndex: '9' }}
                             justify='start'>
-                            <MenuItems
+                            <OptionViewer
                                 marMap={toggleMap}
                                 marFilter={toggleFilter}
                                 marLogin={toggleLogin}/>
@@ -314,13 +187,9 @@ const marApp = () => {
                     ) : (
                     <Layer>
                         <CloseBar marAction={toggleMenu}/>
-                        <Box
-                            fill
-                            justify='start'>
-                            <MenuItems
-                                marMap={toggleMap}
-                                marFilter={toggleFilter}/>
-                        </Box>
+                        <Options
+                            marMap={toggleMap}
+                            marFilter={toggleFilter}/>
                     </Layer>
                     )}
 
@@ -329,16 +198,7 @@ const marApp = () => {
                         <CloseBar header='Lot Map' 
                             marAction={toggleMap}/>
 
-                        <ImageZoom 
-                            cropWidth={Dimensions.get('window').width}
-                            cropHeight={Dimensions.get('window').height - 64}
-                            imageWidth={1495}
-                            imageHeight={1147}
-                            enableCenterFocus={false}>
-                            <Image 
-                                source={require('./assets/marMap.png')}
-                                style={{ width:1495, height:1147 }}/>
-                        </ImageZoom>
+                        <MapViewer/>
                     </Layer>
                     )}
 
@@ -347,12 +207,9 @@ const marApp = () => {
                         <CloseBar header="Filter By..."
                             marAction={toggleFilter}/>
                         
-                        <Box pad='large' justify='center'> 
-                            <FilterMenu label='Registration Type'
-                                array={REG_TYPES}/>
-                            <FilterMenu label='Favorite Lot'
-                                array={SAMPLE_DATA}/>
-                        </Box>
+                        <FilterViewer
+                            types={REG_TYPES}
+                            lots={SAMPLE_DATA} />
                     </Layer>
                     )}
 
@@ -360,10 +217,8 @@ const marApp = () => {
                     <Layer>
                         <CloseBar header="Log In"
                             marAction={toggleLogin}/>
-                        <iframe src="https://my.marist.edu/"
-                            width={Dimensions.get('window').width}
-                            height={Dimensions.get('window').height-64}>
-                        </iframe>
+
+                        <LoginViewer/>
                     </Layer>
                     )}
                 </Box>
