@@ -187,7 +187,7 @@ const marApp = () => {
                     ) : (
                     <Layer>
                         <CloseBar marAction={toggleMenu}/>
-                        <Options
+                        <OptionViewer
                             marMap={toggleMap}
                             marFilter={toggleFilter}/>
                     </Layer>

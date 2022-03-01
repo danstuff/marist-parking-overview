@@ -10,27 +10,19 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@expo/vector-icons": "^12.0.0",
+    "@expo/webpack-config": "^0.16.18",
     "expo": "~44.0.0",
-    "expo-asset": "~8.4.6",
-    "expo-font": "~10.0.4",
     "expo-status-bar": "~1.2.0",
-    "grommet": "^2.20.0",
+    "grommet": "^2.21.0",
     "grommet-icons": "^4.7.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-image-pan-zoom": "^2.1.12",
-    "react-native-safe-area-context": "3.3.2",
-    "react-native-svg": "^12.1.1",
-    "react-native-web": "0.17.1",
-    "react-native-webview": "^11.17.2",
-    "sharp-cli": "^1.15.0",
-    "styled-components": "^5.3.3"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@expo/webpack-config": "^0.16.18"
+    "@babel/core": "^7.12.9"
   },
   "private": true
 }
